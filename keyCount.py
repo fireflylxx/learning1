@@ -25,11 +25,15 @@ KEYWORDS = (
 
 # 对文本进行处理，导入re，筛
 def REMAKE(PATH):
-    data =open(PATH, mode='r').read()
+    data = open(PATH, mode='r').read()
     data_final = re.sub(r"\/\*([^\*^\/]*|[\**\/*]*|[^\**\/]*)*\*\/", "", data)  # 剔除注释块
     data_final = re.sub(r"\/\/[^\n]*", "", data_final)                          # 剔除字符串
-    data_final = re.sub(r"[ \f\r\t\v]+", " ",data_final)                        # 剔除多余空格
+    data_final = re.sub(r"[ \f\r\t\v]+", " ", data_final)                       # 剔除多余空格
+    data_final = re.sub(r"[\n]+", "  ", data_final)                             # 替换换行为双空格
+    data_final = re.sub(r"[{]+", "  ", data_final)                              # 替换大括号为双空格
+    data_final = re.sub(r"[}]+", "  ", data_final)
     data_final = re.split(r"\W", data_final)                                    # 转成列表
+    # print(data_final)
     return data_final
 
 def FIND_KEYWORDS(data_final):
@@ -75,7 +79,7 @@ def FIND_KEYWORDS(data_final):
 
 # 输出对应等级函数
 def OUT_PUT(GRADE):
-     if GRADE >= 1:
+     if GRADE >= 1:                                                     # python里无switch case 语句
        print("total num:", KEY_COUNT)
 
      if GRADE >= 2:
