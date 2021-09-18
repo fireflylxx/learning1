@@ -32,8 +32,8 @@ def REMAKE(PATH):
     data_final = re.sub(r"[\n]+", "  ", data_final)                             # 替换换行为双空格
     data_final = re.sub(r"[{]+", "  ", data_final)                              # 替换大括号为双空格
     data_final = re.sub(r"[}]+", "  ", data_final)
+    data_final = re.sub(r"[;]+", "  ", data_final)                              # 分号变为双空格
     data_final = re.split(r"\W", data_final)                                    # 转成列表
-    # print(data_final)
     return data_final
 
 def FIND_KEYWORDS(data_final):
