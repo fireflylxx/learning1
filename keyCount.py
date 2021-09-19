@@ -27,15 +27,15 @@ KEYWORDS = (
 # 对文本进行处理，导入re，筛
 def remake(path):
     data = open(path, mode='r').read()
-    data_final = re.sub(r"\/\*([^\*^\/]*|[\*^\/*]*|[^\**\/]*)*\*\/", "", data)               # 剔除注释块
-    data_final = re.sub(r"[^\n]*", "", data_final)                              # 剔除注释行
-    data_final = re.sub(r"\"(.*)\"", "", data_final)                            # 剔除字符串
-    data_final = re.sub(r"[ \f\r\t\v]+", " ", data_final)                       # 剔除多余空格
-    data_final = re.sub(r"[\n]+", "  ", data_final)                             # 替换换行为双空格
-    data_final = re.sub(r"[{]+", "  ", data_final)                              # 替换大括号为双空格
+    data_final = re.sub(r"\/\*([^\*^\/]*|[\**\/*]*|[^\**\/]*)*\*\/", "", data)     # 剔除注释块
+    data_final = re.sub(r"\/\/[^\n]*", "", data_final)                             # 剔除注释行
+    data_final = re.sub(r"\"(.*)\"", "", data_final)                               # 剔除字符串
+    data_final = re.sub(r"[ \f\r\t\v]+", " ", data_final)                          # 剔除多余空格
+    data_final = re.sub(r"[\n]+", "  ", data_final)                                # 替换换行为双空格
+    data_final = re.sub(r"[{]+", "  ", data_final)                                 # 替换大括号为双空格
     data_final = re.sub(r"[}]+", "  ", data_final)
-    data_final = re.sub(r"[;]+", "  ", data_final)                              # 分号变为双空格
-    data_final = re.split(r"\W", data_final)                                    # 转成列表
+    data_final = re.sub(r"[;]+", "  ", data_final)                                 # 分号变为双空格
+    data_final = re.split(r"\W", data_final)                                       # 转成列表
     return data_final
 
 
