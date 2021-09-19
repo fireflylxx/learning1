@@ -1,4 +1,4 @@
-# sys用于输入文件，re 正则化表达式用于处理文件转成列表 
+# sys用于输入文件，re 正则化表达式用于处理文件转成列表
 # time 用于显示程序运行时间 logging 在输入界面显示有无错误
 import logging
 import sys
@@ -81,19 +81,17 @@ def find_keywords(data_final):
 
 
 # 输出对应等级函数
-def out_put(grade):
+def out_put(str3):
+    grade = int(str3)
 
     if grade >= 1:                                                     # python里无switch case 语句
         print("total num:", KEY_COUNT)
 
     if grade >= 2:
         print("switch num:", SWITCH_COUNT)
-        print("case num:", end=' ')
+        print("case num: ", end='')
         if SWITCH_COUNT > 0:
             print(*CASE_COUNT, sep=' ')
-
-        else:
-            print(0)
 
     if grade >= 3:
         print("if-else num:", IF_ELSE_COUNT)
@@ -102,20 +100,26 @@ def out_put(grade):
         print("if-elseif-else num:", IF_ELIF_ELSE_COUNT)
 
 
+def count_key(path, lever):
+
+    list_word = remake(path)  # 列表化
+    find_keywords(list_word)  # 处理
+    out_put(lever)            # 输出
+
+
 # 主函数
 if __name__ == "__main__":
     t = time.time()
 
     if len(sys.argv) > 1:
-        PATH = sys.argv[1]                                                        # 传入文件名
+        PATH = sys.argv[1]                                                   # 传入文件路径
         str2 = sys.argv[2]
     else:
         PATH = r'D:\PycharmProjects\pythonProject\key.c'
-        str2 = '4'                                                                # 传入等级并且转换类型
+        str2 = '4'
+
     try:
-        GRADE = int(str2)
-        FILE = remake(PATH)                                                       # 列表化
-        find_keywords(FILE)                                                       # 处理
-        out_put(GRADE)                                                            # 输出
+        count_key(PATH, str2)                                                # 调用函数块，判断是否抛出异常
     except IOError:
         logging.warning("你输入的文件路径有误")
+        
