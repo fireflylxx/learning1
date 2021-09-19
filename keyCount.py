@@ -1,12 +1,11 @@
-# sys用于输入文件，re 正则化表达式用于处理文件转成列表
+# sys用于输入文件，re 正则化表达式用于处理文件转成列表 
+# time 用于显示程序运行时间 logging 在输入界面显示有无错误
 import logging
 import sys
 import re
-
-
-# 定义变量
 import time
 
+# 定义
 STACK = []
 KEY_COUNT = 0
 CASE_COUNT = [0]
@@ -30,13 +29,10 @@ KEYWORDS = (
 # 对文本进行处理，导入re，筛
 def remake(path):
     data = open(path, mode='r').read()
-    data_final = re.sub(r"\/\*([^\*^\/]*|[\**\/*]*|[^\**\/]*)*\*\/", "", data)              # 剔除注释块
-    data_final = re.sub(r"\/\/[^\n]*", "", data_final)                               # 剔除注释行
+    data_final = re.sub(r"\/\*([^\*^\/]*|[\**\/*]*|[^\**\/]*)*\*\/", "", data)  # 剔除注释块
+    data_final = re.sub(r"\/\/[^\n]*", "", data_final)                          # 剔除注释行
     data_final = re.sub(r"\"(.*)\"", "", data_final)                            # 剔除字符串
     data_final = re.sub(r"[ \f\r\t\v]+", " ", data_final)                       # 剔除多余空格
-    data_final = re.sub(r"[\n]+", "  ", data_final)                             # 替换换行为双空格
-    data_final = re.sub(r"[{]+", "  ", data_final)                              # 替换大括号为双空格
-    data_final = re.sub(r"[}]+", "  ", data_final)
     data_final = re.sub(r"[;]+", "  ", data_final)                              # 分号变为双空格
     data_final = re.split(r"\W", data_final)                                    # 转成列表
     return data_final
@@ -116,8 +112,10 @@ if __name__ == "__main__":
     else:
         PATH = r'D:\PycharmProjects\pythonProject\key.c'
         str2 = '4'                                                                # 传入等级并且转换类型
-
+    try:
         GRADE = int(str2)
         FILE = remake(PATH)                                                       # 列表化
         find_keywords(FILE)                                                       # 处理
         out_put(GRADE)                                                            # 输出
+    except IOError:
+        logging.warning("你输入的文件路径有误")
