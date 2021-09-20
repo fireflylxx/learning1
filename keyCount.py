@@ -32,25 +32,26 @@ def remake(path):
     data_final = re.sub(r"\/\*([^\*^\/]*|[\**\/*]*|[^\**\/]*)*\*\/", "", data)  # 剔除注释块
     data_final = re.sub(r"\/\/[^\n]*", "", data_final)                          # 剔除注释行
     data_final = re.sub(r"\"(.*)\"", "", data_final)                            # 剔除字符串
-    data_final = re.sub(r"[ \f\r\t\v]+", " ", data_final)                       # 剔除多余空格
-    data_final = re.sub(r"[;]+", "  ", data_final)                              # 分号变为双空格
+
+    data_final = re.sub(r"[ \t\v\r\f]+", " ", data_final)                       # 剔除多余空格
+    data_final = re.sub(r"[\n]+", "  ", data_final)                             # 分号变为双空格
     data_final = re.split(r"\W", data_final)                                    # 转成列表
     return data_final
 
 
 def find_keywords(data_final):
-    global STACK, KEY_COUNT                                                     # 全局变量声明
+    global STACK, KEY_COUNT  # 全局变量声明
     global CASE_COUNT, SWITCH_COUNT
     global IF_ELSE_COUNT
     global IF_ELIF_ELSE_COUNT
 
-    data_iter = iter(range(len(data_final)))                                    # 生成一个可迭代对象
-    for i in data_iter:                                                         # 和字典匹配查找
+    data_iter = iter(range(len(data_final)))                  # 生成一个可迭代对象
+    for i in data_iter:  # 和字典匹配查找
         temp = data_final[i]
-        if temp != '' and temp in KEYWORDS:                                     # GRADE 1
+        if temp != '' and temp in KEYWORDS:  # GRADE 1
             KEY_COUNT += 1
 
-            if temp == "switch":                                                # GRADE 2
+            if temp == "switch":  # GRADE 2
                 SWITCH_COUNT += 1
                 if CASE_COUNT[0] != 0:
                     CASE_COUNT.append(0)
@@ -58,11 +59,11 @@ def find_keywords(data_final):
             elif temp == "case":
                 CASE_COUNT[-1] += 1
 
-            elif temp == "if":                                                  # GRADE 3 and GRADE 4
+            elif temp == "if":  # GRADE 3 and GRADE 4
                 STACK.append("if")
 
             elif temp == "else":
-                if data_final[i+1] == "if":
+                if data_final[i + 1] == "if":
                     STACK.append('elif')
                     KEY_COUNT += 1
                     data_iter.__next__()
@@ -83,28 +84,29 @@ def find_keywords(data_final):
 # 输出对应等级函数
 def out_put(str3):
     grade = int(str3)
+    if grade >= 5:
+        print("文件输入的等级不对")
 
-    if grade >= 1:                                                     # python里无switch case 语句
+    if (grade >= 1) and (grade < 5):                         # 输出增加的等级要求
         print("total num:", KEY_COUNT)
 
-    if grade >= 2:
+    if (grade >= 2) and (grade < 5):
         print("switch num:", SWITCH_COUNT)
         print("case num: ", end='')
         if SWITCH_COUNT > 0:
             print(*CASE_COUNT, sep=' ')
 
-    if grade >= 3:
+    if (grade >= 3) and (grade < 5):
         print("if-else num:", IF_ELSE_COUNT)
 
-    if grade >= 4:
+    if grade == 4:
         print("if-elseif-else num:", IF_ELIF_ELSE_COUNT)
 
 
 def count_key(path, lever):
-
     list_word = remake(path)  # 列表化
     find_keywords(list_word)  # 处理
-    out_put(lever)            # 输出
+    out_put(lever)  # 输出
 
 
 # 主函数
@@ -112,14 +114,13 @@ if __name__ == "__main__":
     t = time.time()
 
     if len(sys.argv) > 1:
-        PATH = sys.argv[1]                                                   # 传入文件路径
+        PATH = sys.argv[1]  # 传入文件路径
         str2 = sys.argv[2]
     else:
         PATH = r'D:\PycharmProjects\pythonProject\key.c'
         str2 = '4'
 
     try:
-        count_key(PATH, str2)                                                # 调用函数块，判断是否抛出异常
+        count_key(PATH, str2)                                # 调用函数块，判断是否抛出异常
     except IOError:
         logging.warning("你输入的文件路径有误")
-        
